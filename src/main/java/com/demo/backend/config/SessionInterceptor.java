@@ -36,11 +36,15 @@ public class SessionInterceptor implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new SecurityInterceptor())
-                .excludePathPatterns("/admin/site/login")
-                .excludePathPatterns("/admin/site/logout")
+                .addPathPatterns("/**")
+                .excludePathPatterns("/**/login")
+                .excludePathPatterns("/**/sendvcode")
+                .excludePathPatterns("/**/getCaptchaImage")
+                .excludePathPatterns("/**/test")
+                .excludePathPatterns("/**/logout")
+                .excludePathPatterns("/error")
                 .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**")
-                .addPathPatterns("/admin/**");
-//                .excludePathPatterns("/**");
+        ;
     }
 
     @Override
@@ -127,7 +131,7 @@ public class SessionInterceptor implements WebMvcConfigurer {
                 }
             }
             response.getWriter().write(JSON.toJSONString(
-                    new Result("401","please login first")
+                    new Result<String>("401","please login first")
             ));
             return false;
         }

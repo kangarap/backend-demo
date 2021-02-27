@@ -11,7 +11,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
@@ -30,7 +29,7 @@ import static com.demo.backend.utils.IpUtil.getIpAddr;
 @Component
 @Slf4j
 public class LogAspect {
-    @Autowired
+    @Resource
     private HttpServletRequest httpServletRequest;
 
     @Resource
@@ -118,11 +117,11 @@ public class LogAspect {
         LocalVariableTableParameterNameDiscoverer u = new LocalVariableTableParameterNameDiscoverer();
         String[] paramNames = u.getParameterNames(method);
         if (args != null && paramNames != null) {
-            String params = "";
+            StringBuilder params = new StringBuilder();
             for (int i = 0; i < args.length; i++) {
-                params += "  " + paramNames[i] + ": " + args[i];
+                params.append("  ").append(paramNames[i]).append(": ").append(args[i]);
             }
-            log.setParams(params);
+            log.setParams(params.toString());
         }
 
         HttpSession session = httpServletRequest.getSession();
